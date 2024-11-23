@@ -22,40 +22,76 @@ class ViewController: UIViewController {
     
     @objc func onTimercalled() {
         
-        let remainingMinutes: Int = countdown / 60
-        let remainingSeconds: Int = countdown % 60
+        updateLabal()
+        
+        countdown -= 1
         
         
-        label.text = String(format: "%02d: %02d" ,remainingMinutes, remainingSeconds)
-                            countdown -= 1
         
         if countdown < 0 {
             
-            let stopAlert = UIAlertController(title: "タイマーが終了しました",message:nil,preferredStyle: .alert )
-            let okAction = UIAlertAction(title: "OK" , style: .default)
+            showAlert()
             
-            stopAlert .addAction(okAction)
             
-            present(stopAlert, animated: true)
+        
             
             timer.invalidate()
         }
         
         
     }
-
-    @IBAction func select30seconds() {
+    
+    func updateLabal() {
+        let remainingMinutes: Int = countdown / 60
+        let remainingSeconds: Int = countdown % 60
         
-        countdown = 30
         
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector:   #selector(onTimercalled()), userInfo: nil, repeats: true)
+        label.text = String(format: "%02d: %02d" ,remainingMinutes, remainingSeconds)
+        
+    }
+    func showAlert() {
+        let stopAlert = UIAlertController(title: "タイマーが終了しました",message:nil,preferredStyle: .alert )
+        let okAction = UIAlertAction(title: "OK" , style: .default)
+        
+        stopAlert .addAction(okAction)
+        
+        present(stopAlert, animated: true)
+        
+        
+    }
+    
+    func startTimer(time: Int){
+        countdown = time
+        
+        if timer != nil {
+            timer.invalidate()
+        }
+        
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector:   #selector(onTimercalled), userInfo: nil, repeats: true)
         
         
         
         timer.fire() //タイマーを開始
         
-        
     }
+
+    @IBAction func select30seconds() {
+        
+        startTimer(time: 30)
+    }
+    
+    @IBAction func select1minutes() {
+        startTimer(time: 60)
+        }
+    
+    @IBAction func select5minutes(){
+        startTimer(time: 300)
+    }
+    
+    @IBAction func select10minutes(){
+        startTimer(time: 600)
+    }
+    
 
 }
  
